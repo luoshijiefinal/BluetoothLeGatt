@@ -44,6 +44,8 @@ import java.util.List;
  * and display GATT services and characteristics supported by the device.  The Activity
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
+ * 对于给定的BLE设备，此活动提供用户界面来连接，显示数据和显示设备支持的GATT services和characteristics。
+ * 活动与{@code BluetoothLeService}进行通信，后者又与蓝牙LE API进行交互。
  */
 public class DeviceControlActivity extends Activity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
@@ -66,6 +68,7 @@ public class DeviceControlActivity extends Activity {
     private final String LIST_UUID = "UUID";
 
     // Code to manage Service lifecycle.
+    // 用于管理服务生命周期的代码。
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -76,6 +79,7 @@ public class DeviceControlActivity extends Activity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
+            //成功启动初始化后自动连接到设备。
             mBluetoothLeService.connect(mDeviceAddress);
         }
 
@@ -86,11 +90,11 @@ public class DeviceControlActivity extends Activity {
     };
 
     // Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
+    // 处理服务部门发起的各种事件。
+    // ACTION_GATT_CONNECTED: 连接到GATT服务器。
+    // ACTION_GATT_DISCONNECTED: 与GATT服务器断开连接。
+    // ACTION_GATT_SERVICES_DISCOVERED: 发现GATT服务。
+    // ACTION_DATA_AVAILABLE: 从设备接收数据。这可能是读取或通知操作的结果。
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
