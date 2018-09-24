@@ -38,6 +38,7 @@ import java.util.UUID;
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
+ * 用于管理与给定蓝牙LE设备上托管的GATT服务器的连接和数据通信的服务。
  */
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
@@ -68,6 +69,7 @@ public class BluetoothLeService extends Service {
 
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
+    //实现应用关心的GATT事件的回调方法。 例如，发现了连接更改和服务。
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -126,6 +128,8 @@ public class BluetoothLeService extends Service {
         // This is special handling for the Heart Rate Measurement profile.  Data parsing is
         // carried out as per profile specifications:
         // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
+        //这是心率测量配置文件的特殊处理。 数据解析按照配置文件规范执行：
+        //http：//developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx？u = org.bluetooth.characteristic.heart_rate_measurement.xml
         if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
             int format = -1;
@@ -168,6 +172,8 @@ public class BluetoothLeService extends Service {
         // After using a given device, you should make sure that BluetoothGatt.close() is called
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
+        //在使用了给定的设备之后，应该确保调用BluetoothGatt.close()，
+        //以便正确清理资源。在这个特定的示例中，当UI与服务断开连接时调用close()。
         close();
         return super.onUnbind(intent);
     }
@@ -175,9 +181,9 @@ public class BluetoothLeService extends Service {
     private final IBinder mBinder = new LocalBinder();
 
     /**
-     * Initializes a reference to the local Bluetooth adapter.
+     * 初始化对本地蓝牙适配器的引用。
      *
-     * @return Return true if the initialization is successful.
+     * @return 如果初始化成功，返回true。
      */
     public boolean initialize() {
         // For API level 18 and above, get a reference to BluetoothAdapter through
@@ -185,14 +191,14 @@ public class BluetoothLeService extends Service {
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
-                Log.e(TAG, "Unable to initialize BluetoothManager.");
+                Log.e(TAG, "无法初始化BluetoothManager。");
                 return false;
             }
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
-            Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
+            Log.e(TAG, "无法获得BluetoothAdapter.");
             return false;
         }
 
@@ -200,14 +206,13 @@ public class BluetoothLeService extends Service {
     }
 
     /**
-     * Connects to the GATT server hosted on the Bluetooth LE device.
+     * 连接到蓝牙LE设备上的GATT服务器。
      *
      * @param address The device address of the destination device.
      *
-     * @return Return true if the connection is initiated successfully. The connection result
-     *         is reported asynchronously through the
-     *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
-     *         callback.
+     * @return 如果成功启动连接，则返回true。
+     * 通过{@code BluetoothGattCallback＃onConnectionStateChange（android.bluetooth.BluetoothGatt，int，int）}
+     * 回调异步报告连接结果。
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
@@ -242,10 +247,9 @@ public class BluetoothLeService extends Service {
     }
 
     /**
-     * Disconnects an existing connection or cancel a pending connection. The disconnection result
-     * is reported asynchronously through the
+     *断开现有连接或取消的挂起连接。断开连接的结果通过
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
-     * callback.
+     * 回调。
      */
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
@@ -284,6 +288,7 @@ public class BluetoothLeService extends Service {
 
     /**
      * Enables or disables notification on a give characteristic.
+     * 启用或禁用给定characteristic的通知。
      *
      * @param characteristic Characteristic to act on.
      * @param enabled If true, enable notification.  False otherwise.
@@ -308,8 +313,10 @@ public class BluetoothLeService extends Service {
     /**
      * Retrieves a list of supported GATT services on the connected device. This should be
      * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
+     * 检索连接设备上支持的GATT服务列表。只有在{@code BluetoothGatt#discoverServices()}成功完成之后，才会调用它。
      *
      * @return A {@code List} of supported services.
+     * 支持的服务。
      */
     public List<BluetoothGattService> getSupportedGattServices() {
         if (mBluetoothGatt == null) return null;

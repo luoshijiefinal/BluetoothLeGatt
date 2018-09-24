@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
+ * 用于扫描和显示可用蓝牙LE设备的活动。
  */
 public class DeviceScanActivity extends ListActivity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
@@ -48,7 +49,7 @@ public class DeviceScanActivity extends ListActivity {
     private Handler mHandler;
 
     private static final int REQUEST_ENABLE_BT = 1;
-    // Stops scanning after 10 seconds.
+    // 10秒后停止扫描。
     private static final long SCAN_PERIOD = 10000;
 
     @Override
@@ -59,6 +60,7 @@ public class DeviceScanActivity extends ListActivity {
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
+        //使用此检查确定设备是否支持BLE。 然后，您可以有选择地禁用与BLE相关的功能。
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
@@ -66,11 +68,13 @@ public class DeviceScanActivity extends ListActivity {
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
+        //初始化蓝牙适配器。 对于API级别18及更高级别，请通过BluetoothManager获取对BluetoothAdapter的引用。
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
+        // 检查设备是否支持蓝牙。
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
             finish();
@@ -112,8 +116,7 @@ public class DeviceScanActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
 
-        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-        // fire an intent to display a dialog asking the user to grant permission to enable it.
+        //确保设备上启用了蓝牙。 如果当前未启用蓝牙，则触发意图以显示一个对话框，要求用户授予启用它的权限。
         if (!mBluetoothAdapter.isEnabled()) {
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -129,7 +132,7 @@ public class DeviceScanActivity extends ListActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // User chose not to enable Bluetooth.
+        // 用户选择不启用蓝牙。
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
             finish();
             return;
@@ -158,9 +161,13 @@ public class DeviceScanActivity extends ListActivity {
         startActivity(intent);
     }
 
+    /**
+     * 扫描设备
+     * @param enable true：开始扫描设备 false:停止扫描设备
+     */
     private void scanLeDevice(final boolean enable) {
         if (enable) {
-            // Stops scanning after a pre-defined scan period.
+            // 在预定义的扫描周期后停止扫描。
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -179,7 +186,7 @@ public class DeviceScanActivity extends ListActivity {
         invalidateOptionsMenu();
     }
 
-    // Adapter for holding devices found through scanning.
+    // 适用于通过扫描找到的固定设备。
     private class LeDeviceListAdapter extends BaseAdapter {
         private ArrayList<BluetoothDevice> mLeDevices;
         private LayoutInflater mInflator;
@@ -222,7 +229,7 @@ public class DeviceScanActivity extends ListActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
-            // General ListView optimization code.
+            // 一般ListView优化代码。
             if (view == null) {
                 view = mInflator.inflate(R.layout.listitem_device, null);
                 viewHolder = new ViewHolder();
@@ -245,7 +252,7 @@ public class DeviceScanActivity extends ListActivity {
         }
     }
 
-    // Device scan callback.
+    // 蓝牙设备扫描回调。
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
 

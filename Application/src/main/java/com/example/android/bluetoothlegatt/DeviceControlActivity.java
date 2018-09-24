@@ -121,6 +121,8 @@ public class DeviceControlActivity extends Activity {
     // demonstrates 'Read' and 'Notify' features.  See
     // http://d.android.com/reference/android/bluetooth/BluetoothGatt.html for the complete
     // list of supported characteristic features.
+    //如果选择了给定的GATT特性，请检查支持的功能。 此示例演示了“读取”和“通知”功能。 有关支持的特征功能的完整列表，
+    // 请参见http://d.android.com/reference/android/bluetooth/BluetoothGatt.html。
     private final ExpandableListView.OnChildClickListener servicesListClickListner =
             new ExpandableListView.OnChildClickListener() {
                 @Override
@@ -133,6 +135,7 @@ public class DeviceControlActivity extends Activity {
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                             // If there is an active notification on a characteristic, clear
                             // it first so it doesn't update the data field on the user interface.
+                            //如果有关于characteristic的活动通知，请先将其清除，以使其不更新用户界面上的数据字段。
                             if (mNotifyCharacteristic != null) {
                                 mBluetoothLeService.setCharacteristicNotification(
                                         mNotifyCharacteristic, false);
@@ -248,6 +251,7 @@ public class DeviceControlActivity extends Activity {
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
     // on the UI.
+    //演示如何遍历支持的GATT服务/特性。在此示例中，我们填充绑定到UI上的ExpandableListView的数据结构。
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String uuid = null;
@@ -259,6 +263,7 @@ public class DeviceControlActivity extends Activity {
         mGattCharacteristics = new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
 
         // Loops through available GATT Services.
+        //通过可用的GATT服务循环。
         for (BluetoothGattService gattService : gattServices) {
             HashMap<String, String> currentServiceData = new HashMap<String, String>();
             uuid = gattService.getUuid().toString();
@@ -275,6 +280,7 @@ public class DeviceControlActivity extends Activity {
                     new ArrayList<BluetoothGattCharacteristic>();
 
             // Loops through available Characteristics.
+            //循环可用的特征。
             for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                 charas.add(gattCharacteristic);
                 HashMap<String, String> currentCharaData = new HashMap<String, String>();
